@@ -46,6 +46,11 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void start_bluetooth(View view) {
+        Intent intent = new Intent(this, RemoteBluetooth.class);
+        startActivity(intent);
+    }
+
     public void sendMessage(View view){
         Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);

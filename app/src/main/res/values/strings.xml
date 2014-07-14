@@ -13,5 +13,7 @@
     <string name="title_activity_display_search">DisplaySearch</string>
     <string name="settings_text">This is the settings page</string>
     <string name="search_text">This is the search page</string>
+    <string name="start_bluetooth">Start Bluetooth</string>
+    <string name="title_activity_remote_bluetooth">RemoteBluetooth</string>
 
 </resources>
