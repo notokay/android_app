@@ -67,7 +67,7 @@ public class RemoteBluetooth extends Activity {
 
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MESSAGE_STATE_CHANGE
+                case MESSAGE_STATE_CHANGE:
                     if (D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case BluetoothChatService.STATE_CONNECTED:
@@ -79,7 +79,7 @@ public class RemoteBluetooth extends Activity {
                             mTitle.setText(R.string.title_connecting);
                             break;
                         case BluetoothChatService.STATE_LISTEN:
-                        case BLuetoothChatService.STATE_NONE:
+                        case BluetoothChatService.STATE_NONE:
                             mTitle.setText(R.string.title_not_connected);
                             break;
                     }

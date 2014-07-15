@@ -29,7 +29,15 @@
         <activity
             android:name=".RemoteBluetooth"
             android:label="@string/title_activity_remote_bluetooth"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myfirstapp.app.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BluetoothChatService"
+            android:label="@string/title_activity_bluetooth_chat_service"
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.myfirstapp.app.MainActivity" />

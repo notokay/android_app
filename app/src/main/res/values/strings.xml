@@ -15,5 +15,6 @@
     <string name="search_text">This is the search page</string>
     <string name="start_bluetooth">Start Bluetooth</string>
     <string name="title_activity_remote_bluetooth">RemoteBluetooth</string>
+    <string name="title_activity_bluetooth_chat_service">BluetoothChatService</string>
 
 </resources>
