@@ -104,7 +104,7 @@ public class RemoteBluetooth extends Activity {
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
-                            Toast.LENGTH_SHORT.show());
+                            Toast.LENGTH_SHORT).show();
                     break;
             }
         }
