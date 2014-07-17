@@ -290,7 +290,7 @@ public class BluetoothChatService {
     //succeeds or fails
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
-        private final BluetoothAdapter mmDevice;
+        private final BluetoothDevice mmDevice;
 
         public ConnectThread(BluetoothDevice device) {
             mmDevice = device;
@@ -402,12 +402,17 @@ public class BluetoothChatService {
 
                 //Share the sent message back to the UI Activity
                 mHandler.obtainMessage(RemoteBluetooth.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
-            } catch
+            } catch (IOException e){
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        public void cancel(){
+            try{
+                mmSocket.close();
+            } catch(IOException e){
+                Log.e(TAG, "close() of connect socket failed", e);
+            }
         }
     }
-
-
-
-
-
 }
