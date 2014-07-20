@@ -44,7 +44,7 @@ public class RemoteBluetooth extends Activity {
                 @Override
                 public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                     //If the action is a key-up event on the return key, send the message
-                    if (actionId == EditorInfo.IME_NULL && KeyEvent.ACTION_UP) {
+                    if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
                         String message = view.getText().toString();
                         sendMessage(message);
                     }
