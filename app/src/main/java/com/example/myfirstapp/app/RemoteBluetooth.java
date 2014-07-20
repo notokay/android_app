@@ -191,7 +191,7 @@ public class RemoteBluetooth extends Activity {
         //Initialize the send button with a listener for click events
         mSendButton = (Button) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(View v) {
                 //Send a message using content of the edit text widget
                 TextView view = (TextView) findViewById(R.id.edit_text_out);
                 String message = view.getText().toString();
