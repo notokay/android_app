@@ -320,6 +320,8 @@ public class MainActivity extends Activity {
         mStatus.setClickable(false);
         mStatus.setText(R.string.connection_status);
         mMenu.findItem(R.id.restart_bluetooth).setVisible(true);
+        mMenu.findItem(R.id.scan).setVisible(true);
+        mMenu.findItem(R.id.discoverable).setVisible(true);
         mStatus.setEnabled(true);
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -353,10 +355,6 @@ public class MainActivity extends Activity {
 
     private void restart_bluetooth() {
         mChatService.stop();
-
-        Integer bluestatus = mBluetoothAdapter.getState();
-
-        Log.e(TAG, "current bluetooth status is" + bluestatus.toString());
 
         Log.e(TAG, "Checked for bluetooth availability");
         if (!mBluetoothAdapter.isEnabled()) {

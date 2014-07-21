@@ -18,9 +18,11 @@
     <item
         android:id="@+id/scan"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/connect" />
+        android:title="@string/connect"
+        android:visible="false" />
     <item
         android:id="@+id/discoverable"
         android:icon="@android:drawable/ic_menu_mylocation"
-        android:title="@string/discoverable" />
+        android:title="@string/discoverable"
+        android:visible="false" />
 </menu>

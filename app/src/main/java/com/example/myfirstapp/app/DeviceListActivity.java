@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -47,7 +48,6 @@ public class DeviceListActivity extends Activity {
     // Debugging
     private static final String TAG = "DeviceListActivity";
     private static final boolean D = true;
-
     // Return Intent extra
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
     // The on-click listener for all devices in the ListViews
@@ -88,6 +88,7 @@ public class DeviceListActivity extends Activity {
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
                 setTitle(R.string.select_device);
+                scanButton.setVisibility(View.VISIBLE);
                 if (mNewDevicesArrayAdapter.getCount() == 0) {
                     String noDevices = getResources().getText(R.string.none_found).toString();
                     mNewDevicesArrayAdapter.add(noDevices);
@@ -95,6 +96,7 @@ public class DeviceListActivity extends Activity {
             }
         }
     };
+    private Button scanButton;
     // Member fields
     private BluetoothAdapter mBtAdapter;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
@@ -112,7 +114,7 @@ public class DeviceListActivity extends Activity {
         setResult(Activity.RESULT_CANCELED);
 
         // Initialize the button to perform device discovery
-        Button scanButton = (Button) findViewById(R.id.button_scan);
+        scanButton = (Button) findViewById(R.id.button_scan);
         scanButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 doDiscovery();
@@ -180,6 +182,10 @@ public class DeviceListActivity extends Activity {
     private void doDiscovery() {
         if (D) Log.d(TAG, "doDiscovery()");
 
+        if (mNewDevicesArrayAdapter.getCount() > 0) {
+            mNewDevicesArrayAdapter.clear();
+            mNewDevicesArrayAdapter.notifyDataSetChanged();
+        }
         // Indicate scanning in the title
         setProgressBarIndeterminateVisibility(true);
         setTitle(R.string.scanning);

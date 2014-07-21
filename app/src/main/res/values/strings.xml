@@ -19,6 +19,7 @@
 
     <string name="connection_status">Connection Status</string>
     <string name="restart_bluetooth">Restart Bluetooth</string>
+    <string name="device_list">Choose a Device</string>
 
 
     <!--  BluetoothChat -->
