@@ -17,6 +17,8 @@
     <string name="title_activity_remote_bluetooth">RemoteBluetooth</string>
     <string name="title_activity_bluetooth_chat_service">BluetoothChatService</string>
 
+    <string name="connection_status">Connection Status</string>
+
     <!--  BluetoothChat -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device</string>

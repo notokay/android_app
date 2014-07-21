@@ -1,8 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
+        </style> -->
+    <style name="customTheme2" parent="android:Theme.Holo.Light"></style>
+
+    <style name="customTheme" parent="android:Theme">
+        <item name="android:windowNoTitle">false</item>
     </style>
 
 

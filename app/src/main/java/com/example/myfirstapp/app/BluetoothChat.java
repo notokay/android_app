@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -22,11 +23,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.ActionBar;
 
 /**
  * This is the main Activity that displays the current chat session.
  */
-public class BluetoothChat extends Activity {
+public class BluetoothChat extends ActionBarActivity {
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
@@ -122,6 +124,7 @@ public class BluetoothChat extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (D) Log.e(TAG, "+++ ON CREATE +++");
+
         // Set up the window layout
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.main);
@@ -281,8 +284,10 @@ public class BluetoothChat extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu, menu);
+        Log.e(TAG, "inflated the options menu");
         return true;
     }
 
@@ -291,11 +296,13 @@ public class BluetoothChat extends Activity {
         switch (item.getItemId()) {
             case R.id.scan:
                 // Launch the DeviceListActivity to see devices and do scan
+                Log.e(TAG, "Scan option selected");
                 Intent serverIntent = new Intent(this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 return true;
             case R.id.discoverable:
                 // Ensure this device is discoverable by others
+                Log.e(TAG, "make discoverable option selected");
                 ensureDiscoverable();
                 return true;
         }
