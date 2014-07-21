@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:clickable="false"
-        android:text="@string/connection_status" />
+        android:onClick="start_bluetooth"
+        android:text="@string/start_bluetooth" />
 
     <ListView
         android:id="@+id/in"

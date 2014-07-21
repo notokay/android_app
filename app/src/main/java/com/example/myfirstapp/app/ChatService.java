@@ -34,6 +34,8 @@ public class ChatService {
     private static final String NAME = "BluetoothChat";
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    //57ECE756-E0F7-5BBA-9FE4-5AEB1B92E4C9
+    //00001101-0000-1000-8000-00805F9B34FB
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -258,6 +260,11 @@ public class ChatService {
                             case STATE_CONNECTING:
                                 // Situation normal. Start the connected thread to start managing the connection
                                 connected(socket, socket.getRemoteDevice());
+                                try {
+                                    mmServerSocket.close();
+                                } catch (IOException e) {
+                                    Log.e(TAG, "Could not close server socket", e);
+                                }
                                 break;
                             case STATE_NONE:
                             case STATE_CONNECTED:
@@ -297,12 +304,14 @@ public class ChatService {
         //Constructor, called by the connect() function in the ChatService,
         //which is called when the scan option in the options menu is pressed
         public ConnectThread(BluetoothDevice device) {
+            Log.e(TAG, "ConnectThread instantiated");
             mmDevice = device;
             BluetoothSocket tmp = null;
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice that was received from the connect() method
             try {
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                Log.e(TAG, "Socket to Server created");
             } catch (IOException e) {
                 Log.e(TAG, "create() failed", e);
             }
@@ -318,6 +327,7 @@ public class ChatService {
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
+                Log.e(TAG, "Trying to connect to remote device");
                 mmSocket.connect();
             } catch (IOException e) {
                 connectionFailed();

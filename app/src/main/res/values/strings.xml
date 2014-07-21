@@ -18,13 +18,15 @@
     <string name="title_activity_bluetooth_chat_service">BluetoothChatService</string>
 
     <string name="connection_status">Connection Status</string>
+    <string name="restart_bluetooth">Restart Bluetooth</string>
+
 
     <!--  BluetoothChat -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
     <string name="title_connecting">connecting...</string>
-    <string name="title_connected_to">connected: </string>
+    <string name="title_connected_to">Connected to: </string>
     <string name="title_not_connected">not connected</string>
     <!--  DeviceListActivity -->
     <string name="scanning">scanning for devices...</string>

@@ -11,9 +11,10 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/start_bluetooth"
+        android:id="@+id/restart_bluetooth"
         android:icon="@android:drawable/ic_menu_compass"
-        android:title="@string/start_bluetooth" />
+        android:title="@string/restart_bluetooth"
+        android:visible="false" />
     <item
         android:id="@+id/scan"
         android:icon="@android:drawable/ic_menu_search"

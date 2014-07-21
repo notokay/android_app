@@ -64,6 +64,7 @@ public class MainActivity extends Activity {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+    private Menu mMenu;
     // Name of the connected device
     private String mConnectedDeviceName = null;
     private final Handler mHandler = new Handler() {
@@ -75,6 +76,7 @@ public class MainActivity extends Activity {
                     switch (msg.arg1) {
                         case ChatService.STATE_CONNECTED:
                             mStatus.setText(R.string.title_connected_to);
+                            mStatus.append(" ");
                             mStatus.append(mConnectedDeviceName);
                             mConversationArrayAdapter.clear();
                             break;
@@ -131,6 +133,16 @@ public class MainActivity extends Activity {
     public synchronized void onResume() {
         super.onResume();
         Log.e(TAG, "+ ON RESUME +");
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                if (mStatus.getText().toString() != getString(R.string.start_bluetooth)) {
+                    mStatus.setEnabled(true);
+                    mStatus.setClickable(true);
+                    mStatus.setText(R.string.start_bluetooth);
+                    mMenu.findItem(R.id.restart_bluetooth).setVisible(false);
+                }
+            }
+        }
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
@@ -139,6 +151,7 @@ public class MainActivity extends Activity {
             // Should evaluate to true at startup because ChatService constructor sets state to STATE_NONE
             if (mChatService.getState() == ChatService.STATE_NONE) {
                 // Start the Bluetooth chat services
+                Log.e(TAG, "starting ChatService()");
                 mChatService.start();
             }
         }
@@ -157,6 +170,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu, menu);
+        mMenu = menu;
         Log.e(TAG, "inflated the options menu");
         return true;
     }
@@ -176,10 +190,10 @@ public class MainActivity extends Activity {
                 Log.e(TAG, "make discoverable option selected");
                 ensureDiscoverable();
                 return true;
-            case R.id.start_bluetooth:
+            case R.id.restart_bluetooth:
                 //Start the bluetooth
-                Log.e(TAG, "Start bluetooth option selected");
-                start_bluetooth_option();
+                Log.e(TAG, "Restart bluetooth option selected");
+                restart_bluetooth();
         }
         return false;
     }
@@ -259,6 +273,7 @@ public class MainActivity extends Activity {
         });
 
         // Initialize the ChatService to perform bluetooth connections
+        Log.e(TAG, "Initalizing ChatService");
         mChatService = new ChatService(this, mHandler);
 
         // Initialize the buffer for outgoing messages
@@ -302,25 +317,10 @@ public class MainActivity extends Activity {
 
     //Buttons
     public void start_bluetooth(View view) {
-        // Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        Log.e(TAG, "StartBluetooth Button Pressed");
-        // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mChatService == null) setupService();
-        }
-    }
-
-    public void start_bluetooth_option() {
+        mStatus.setClickable(false);
+        mStatus.setText(R.string.connection_status);
+        mMenu.findItem(R.id.restart_bluetooth).setVisible(true);
+        mStatus.setEnabled(true);
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Log.e(TAG, "StartBluetooth Button Pressed");
@@ -339,6 +339,44 @@ public class MainActivity extends Activity {
             if (mChatService == null) setupService();
         }
         Log.e(TAG, "Checked if Bluetooth is enabled");
+
+        if (mChatService != null) {
+            // Only if the state is STATE_NONE, do we know that we haven't started already
+            // Should evaluate to true at startup because ChatService constructor sets state to STATE_NONE
+            if (mChatService.getState() == ChatService.STATE_NONE) {
+                // Start the Bluetooth chat services
+                Log.e(TAG, "starting ChatService()");
+                mChatService.start();
+            }
+        }
+    }
+
+    private void restart_bluetooth() {
+        mChatService.stop();
+
+        Integer bluestatus = mBluetoothAdapter.getState();
+
+        Log.e(TAG, "current bluetooth status is" + bluestatus.toString());
+
+        Log.e(TAG, "Checked for bluetooth availability");
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else {
+            if (mChatService == null) setupService();
+        }
+        Log.e(TAG, "Checked if Bluetooth is enabled");
+
+        if (mChatService != null) {
+            // Only if the state is STATE_NONE, do we know that we haven't started already
+            // Should evaluate to true at startup because ChatService constructor sets state to STATE_NONE
+            if (mChatService.getState() == ChatService.STATE_NONE) {
+                // Start the Bluetooth chat services
+                Log.e(TAG, "starting ChatService()");
+                mChatService.start();
+            }
+        }
     }
 
 }
