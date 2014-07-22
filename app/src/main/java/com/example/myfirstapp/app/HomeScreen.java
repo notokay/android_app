@@ -83,6 +83,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.O
     }
 
     public void OnListPressed(int result_code, String mac_address) {
-
+        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.homescreen_frag);
+        startBluetoothFrag.connect_device(result_code, mac_address);
     }
 }

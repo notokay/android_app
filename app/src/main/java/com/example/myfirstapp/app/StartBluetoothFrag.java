@@ -191,6 +191,13 @@ public class StartBluetoothFrag extends Fragment {
  }**/
     }
 
+    public void connect_device(int resultCode, String mac_address) {
+        if (resultCode == Activity.RESULT_OK) {
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mac_address);
+            mChatService.connect(device);
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
