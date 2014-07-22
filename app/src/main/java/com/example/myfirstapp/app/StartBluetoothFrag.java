@@ -37,7 +37,6 @@ public class StartBluetoothFrag extends Fragment {
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -94,7 +93,6 @@ public class StartBluetoothFrag extends Fragment {
     private Button status_button;
     private Button scan_button;
     private Menu mMenu;
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -112,7 +110,6 @@ public class StartBluetoothFrag extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment StartBluetoothFrag.
      */
-    // TODO: Rename and change types and number of parameters
     public static StartBluetoothFrag newInstance(String param1, String param2) {
         StartBluetoothFrag fragment = new StartBluetoothFrag();
         Bundle args = new Bundle();
