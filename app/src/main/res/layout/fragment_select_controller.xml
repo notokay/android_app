@@ -10,16 +10,19 @@
     tools:context="com.example.myfirstapp.app.HomeScreen">
     >
 
-    <fragment
-        android:id="@+id/list"
-        android:name="com.example.myfirstapp.app.StartBluetoothFrag"
+    <Button
+        android:id="@+id/launch_bt_chat"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_start_bluetooth" />
+        android:onClick="launch_bt_chat"
+        android:text="@string/launch_bt_chat" />
 
-    <FrameLayout
-        android:id="@+id/homescreen_frag"
+
+    <Button
+        android:id="@+id/launch_arrows_controller"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="wrap_content"
+        android:onClick="launch_arrow_control"
+        android:text="@string/launch_arrows_controller" />
 
 </LinearLayout>

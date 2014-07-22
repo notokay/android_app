@@ -24,13 +24,11 @@
     <string name="launch_arrows_controller">Launch Arrows Controller</string>
     <string name="up">Up</string>
     <string name="down">Down</string>
-
     <string name="left">Left</string>
-
     <string name="right">Right</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-
+    <string name="view_controllers">View Controllers</string>
 
     <!-- BluetoothChat -->
     <string name="send">Send</string>
@@ -52,5 +50,7 @@
     <string name="discoverable">Make discoverable</string>
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="title_activity_arrow_control">ArrowControl</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_samplefrag">samplefrag</string>
 
 </resources>
