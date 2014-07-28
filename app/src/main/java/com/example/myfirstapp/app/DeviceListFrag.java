@@ -63,6 +63,7 @@ public class DeviceListFrag extends Fragment {
     private OnListPressedListener mPressedListener;
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+            Log.e(TAG, "devicelistfrag item clicked");
             // Cancel discovery because it's costly and we're about to connect
             mBtAdapter.cancelDiscovery();
 
@@ -106,7 +107,8 @@ public class DeviceListFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_devicelistfrag, container, false);
+        Log.e(TAG, "devicelistfrag oncreateview");
+        View view = inflater.inflate(R.layout.fragment_devicelist, container, false);
         scanButton = (Button) view.findViewById(R.id.button_scan);
         scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -163,6 +165,7 @@ public class DeviceListFrag extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Log.e(TAG, "devicelistfrag onattach");
         try {
             mPressedListener = (OnListPressedListener) activity;
         } catch (ClassCastException e) {
@@ -174,6 +177,7 @@ public class DeviceListFrag extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.e(TAG, "DeviceListFrag detach");
         // Make sure we're not doing discovery anymore
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();

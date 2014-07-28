@@ -19,10 +19,24 @@
 
 
     <Button
-        android:id="@+id/launch_arrows_controller"
+        android:id="@+id/launch_button_controller"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="launch_arrow_control"
-        android:text="@string/launch_arrows_controller" />
+        android:onClick="launch_button_control"
+        android:text="@string/launch_button_controller" />
+
+    <Button
+        android:id="@+id/launch_slider_controller"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="launch_slider_control"
+        android:text="@string/launch_slider_controller" />
+
+    <Button
+        android:id="@+id/launch_motion_controller"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="launch_motion_control"
+        android:text="@string/launch_motion_controller" />
 
 </LinearLayout>

@@ -8,25 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Button;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SelectControllerFrag.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SelectControllerFrag#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SelectControllerFrag extends Fragment {
+    public static final int BT_CHAT = 0;
+    public static final int BUTTON_CONTROL = 1;
+    public static final int SLIDER_CONTROL = 2;
+    public static final int MOTION_CONTROL = 3;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Button bt_chat;
+    private Button button_control;
+    private Button slider_control;
+    private Button motion_control;
 
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private SelectControllerFragListener mListener;
 
     public SelectControllerFrag() {
         // Required empty public constructor
@@ -61,23 +62,43 @@ public class SelectControllerFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_select_controller, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_select_controller, container, false);
+        bt_chat = (Button) view.findViewById(R.id.launch_bt_chat);
+        bt_chat.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                select_controller(BT_CHAT);
+            }
+        });
+        button_control = (Button) view.findViewById(R.id.launch_button_controller);
+        button_control.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                select_controller(BUTTON_CONTROL);
+            }
+        });
+        slider_control = (Button) view.findViewById(R.id.launch_slider_controller);
+        slider_control.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                select_controller(SLIDER_CONTROL);
+            }
+        });
+        motion_control = (Button) view.findViewById(R.id.launch_motion_controller);
+        motion_control.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                select_controller(MOTION_CONTROL);
+            }
+        });
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (SelectControllerFragListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement SelectControllerFragListener");
         }
     }
 
@@ -85,6 +106,12 @@ public class SelectControllerFrag extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void select_controller(int controller_code) {
+        if (mListener != null) {
+            mListener.selectFrag(controller_code);
+        }
     }
 
     /**
@@ -97,8 +124,8 @@ public class SelectControllerFrag extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+    public interface SelectControllerFragListener {
+        public void selectFrag(int controller_code);
     }
 
 }

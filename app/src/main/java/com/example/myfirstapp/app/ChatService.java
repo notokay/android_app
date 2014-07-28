@@ -13,9 +13,11 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.os.ParcelUuid;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Button;
 
 /**
  * Created by tommy on 7/20/14.
@@ -117,6 +119,26 @@ public class ChatService {
         setState(STATE_CONNECTING);
     }
 
+    public synchronized void disconnect() {
+        Log.e(TAG, "attempted disconnect in mChatService");
+        if (mConnectedThread.mmInStream != null) {
+            try {
+                mConnectedThread.mmInStream.close();
+            } catch (Exception e) {
+            }
+        }
+
+        if (mConnectedThread.mmOutStream != null) {
+            try {
+                mConnectedThread.mmOutStream.close();
+            } catch (Exception e) {
+            }
+        }
+
+        stop();
+        Log.e(TAG, "disconnected in mChatService");
+    }
+
     /**
      * Start the ConnectedThread to begin managing a Bluetooth connection
      * Called by run() of AcceptThread after a connection has been established
@@ -178,6 +200,7 @@ public class ChatService {
         bundle.putString(StartBluetoothFrag.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+        mHandler.obtainMessage(StartBluetoothFrag.MESSAGE_CONNECTION_LOST, -1).sendToTarget();
     }
 
     /**
@@ -332,6 +355,7 @@ public class ChatService {
             } catch (IOException e) {
                 connectionFailed();
                 // Close the socket
+                Log.e(TAG, "attempt at connecting to remote device failed");
                 try {
                     mmSocket.close();
                 } catch (IOException e2) {

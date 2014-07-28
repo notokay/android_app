@@ -21,7 +21,9 @@
     <string name="device_list">Choose a Device</string>
     <string name="bluetooth_chat">Bluetooth Chat</string>
     <string name="launch_bt_chat">Launch Bluetooth Chat</string>
-    <string name="launch_arrows_controller">Launch Arrows Controller</string>
+    <string name="launch_button_controller">Buttons Controller</string>
+    <string name="launch_slider_controller">Slider Controller</string>
+    <string name="launch_motion_controller">Motion Controller</string>
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="left">Left</string>
@@ -29,6 +31,8 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="view_controllers">View Controllers</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="disconnected">Device Disconnected</string>
 
     <!-- BluetoothChat -->
     <string name="send">Send</string>
@@ -52,5 +56,6 @@
     <string name="title_activity_arrow_control">ArrowControl</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_samplefrag">samplefrag</string>
+    <string name="title_activity_dummy">DummyActivity</string>
 
 </resources>

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +31,12 @@ public class StartBluetoothFrag extends Fragment {
     public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
+    public static final int MESSAGE_CONNECTION_LOST = 6;
+
+    //Action Codes
+    public static final int SCAN_BUTTON_PRESSED = 1;
+    public static final int DEVICE_CONNECTED = 2;
+    public static final int RESTART_BLUETOOTH = 3;
     // Key names received from the ChatService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
@@ -46,9 +54,15 @@ public class StartBluetoothFrag extends Fragment {
     private BluetoothAdapter mBluetoothAdapter = null;
     // Name of the connected device
     private String mConnectedDeviceName = null;
+    private Activity thisactivity;
+    private Button status_button;
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.e(TAG, "startbluetoothfrag handlemessage");
+            Integer i = msg.what;
+            Log.e(TAG, "attempted to see what msg.what is");
+
             switch (msg.what) {
                 case MESSAGE_STATE_CHANGE:
                     Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
@@ -57,13 +71,22 @@ public class StartBluetoothFrag extends Fragment {
                             status_button.setText(R.string.title_connected_to);
                             status_button.append(" ");
                             status_button.append(mConnectedDeviceName);
+                            Log.e(TAG, "button set clickable");
+                            status_button.setClickable(true);
+                            status_button.setEnabled(true);
+                            status_button.setOnClickListener(null);
+                            registerForContextMenu(status_button);
+                            mListener.OnstartBluetoothFragInteraction(DEVICE_CONNECTED);
                             break;
                         case ChatService.STATE_CONNECTING:
                             status_button.setText(R.string.title_connecting);
                             break;
                         case ChatService.STATE_LISTEN:
                         case ChatService.STATE_NONE:
+                            if (status_button.isClickable()) status_button.setClickable(false);
+                            Log.e(TAG, "called status_button");
                             status_button.setText(R.string.title_not_connected);
+                            Log.e(TAG, "done calling status_button");
                             break;
                     }
                     break;
@@ -76,6 +99,7 @@ public class StartBluetoothFrag extends Fragment {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
+                    messageReceived(readMessage);
                     break;
                 case MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -84,38 +108,26 @@ public class StartBluetoothFrag extends Fragment {
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
-                    Toast.makeText(getActivity(), msg.getData().getString(TOAST),
+                    Toast.makeText(thisactivity, msg.getData().getString(TOAST),
                             Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_CONNECTION_LOST:
+                    status_button.setEnabled(false);
+                    unregisterForContextMenu(status_button);
                     break;
             }
         }
     };
-    private Button status_button;
     private Button scan_button;
     private Menu mMenu;
-    private String mParam1;
-    private String mParam2;
-
-    private OnScanPressedListener mScanListener;
+    private startBluetoothFragListener mListener;
 
     public StartBluetoothFrag() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StartBluetoothFrag.
-     */
-    public static StartBluetoothFrag newInstance(String param1, String param2) {
+    public static StartBluetoothFrag newInstance() {
         StartBluetoothFrag fragment = new StartBluetoothFrag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -128,6 +140,8 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e(TAG, "startbluetoothfrag oncreateview");
+
         View view = inflater.inflate(R.layout.fragment_start_bluetooth, container, false);
 
         status_button = (Button) view.findViewById(R.id.button_status);
@@ -150,13 +164,25 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG, "onResume of startbluetoothFrag");
         if (mBluetoothAdapter != null) {
+            Log.e(TAG, "mbluetoothadapter is not null");
             if (!mBluetoothAdapter.isEnabled()) {
+                Log.e(TAG, "mbluetoothadapter is not enabled");
                 if (status_button.getText().toString() != getString(R.string.start_bluetooth)) {
                     status_button.setEnabled(true);
-                    status_button.setClickable(true);
+                    if (!status_button.isClickable()) status_button.setClickable(true);
+                    if (!status_button.hasOnClickListeners()) {
+                        status_button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                start_bluetooth();
+                            }
+                        });
+                    }
+                    unregisterForContextMenu(status_button);
                     status_button.setText(R.string.start_bluetooth);
                     scan_button.setVisibility(View.GONE);
+                    mListener.OnstartBluetoothFragInteraction(RESTART_BLUETOOTH);
                     mMenu.findItem(R.id.discoverable).setVisible(false);
                 }
             }
@@ -177,8 +203,8 @@ public class StartBluetoothFrag extends Fragment {
 
     public void scan() {
         Log.e(TAG, "Scan Button Pressed");
-        if (mScanListener != null) {
-            mScanListener.OnScanPressed();
+        if (mListener != null) {
+            mListener.OnstartBluetoothFragInteraction(SCAN_BUTTON_PRESSED);
         }
 /**        if (resultCode == Activity.RESULT_OK) {
  // Get the device MAC address
@@ -194,6 +220,7 @@ public class StartBluetoothFrag extends Fragment {
     public void connect_device(int resultCode, String mac_address) {
         if (resultCode == Activity.RESULT_OK) {
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mac_address);
+            Log.e(TAG, "created device with remote device mac address");
             mChatService.connect(device);
         }
     }
@@ -201,11 +228,12 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        thisactivity = activity;
         try {
-            mScanListener = (OnScanPressedListener) activity;
+            mListener = (startBluetoothFragListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnScanPressedListener");
+                    + " must implement startBluetoothFrag");
         }
     }
 
@@ -228,12 +256,34 @@ public class StartBluetoothFrag extends Fragment {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Action");
+        menu.add(0, v.getId(), 0, R.string.disconnect);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == getString(R.string.disconnect)) {
+            unregisterForContextMenu(status_button);
+            Log.e(TAG, "disconnect option");
+            mChatService.disconnect();
+            Log.e(TAG, "disconnect completed");
+            unregisterForContextMenu(status_button);
+            status_button.setEnabled(false);
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         // Stop the Bluetooth chat services
         if (mChatService != null) mChatService.stop();
 
-        mScanListener = null;
+        mListener = null;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -243,13 +293,19 @@ public class StartBluetoothFrag extends Fragment {
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
                     Log.e(TAG, "Bluetooth now enabled, calling setupService()");
+                    scan_button.setVisibility(View.VISIBLE);
+                    Log.e(TAG, "set scan button to visible");
+                    mMenu.findItem(R.id.discoverable).setVisible(true);
+                    Log.e(TAG, "set discoverable option to visible");
                     // Bluetooth is now enabled, so set up a chat session
                     setupService();
                 } else {
                     // User did not enable Bluetooth or an error occured
                     Log.d(TAG, "BT not enabled");
-                    Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "made toast");
                 }
+                break;
         }
     }
 
@@ -276,7 +332,7 @@ public class StartBluetoothFrag extends Fragment {
     private void start_bluetooth() {
         status_button.setClickable(false);
         status_button.setText(R.string.connection_status);
-        status_button.setEnabled(true);
+        status_button.setEnabled(false);
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Log.e(TAG, "StartBluetooth Button Pressed");
@@ -305,11 +361,34 @@ public class StartBluetoothFrag extends Fragment {
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
             // Should evaluate to true at startup because ChatService constructor sets state to STATE_NONE
+            Log.e(TAG, "mChatService is not null");
             if (mChatService.getState() == ChatService.STATE_NONE) {
                 // Start the Bluetooth chat services
                 Log.e(TAG, "starting ChatService()");
                 mChatService.start();
             }
+        }
+    }
+
+    public boolean sendMessage(String message) {
+        // Check that we're actually connected before trying anything
+        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+            Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            mChatService.write(send);
+            return true;
+        }
+        return false;
+    }
+
+    private void messageReceived(String received_message) {
+        if (mListener != null) {
+            mListener.startBluetoothFrag_MessageReceived(mConnectedDeviceName, received_message);
         }
     }
 
@@ -323,10 +402,11 @@ public class StartBluetoothFrag extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnScanPressedListener {
-        public void OnScanPressed();
+    public interface startBluetoothFragListener {
+        public void OnstartBluetoothFragInteraction(int action_code);
+
+        public void startBluetoothFrag_MessageReceived(String device_name, String received_message);
 
     }
-
 
 }

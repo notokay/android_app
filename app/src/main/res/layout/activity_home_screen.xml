@@ -11,7 +11,7 @@
     >
 
     <fragment
-        android:id="@+id/list"
+        android:id="@+id/start_bluetooth_frag"
         android:name="com.example.myfirstapp.app.StartBluetoothFrag"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
