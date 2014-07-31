@@ -3,6 +3,7 @@ package com.example.myfirstapp.app;
 import android.bluetooth.BluetoothAdapter;
 import android.os.Handler;
 
+import java.util.BitSet;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -242,6 +243,18 @@ public class ChatService {
         r.write(out);
     }
 
+    public void write(byte out) {
+        // Create temporary object
+        ConnectedThread r;
+        // Synchronize a copy of the ConnectedThread
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        // Perform the write unsynchronized
+        r.write(out);
+    }
+
     //Starts a thread that starts connection of the bluetooth as a server
     private class AcceptThread extends Thread {
         // The local server socket
@@ -446,6 +459,17 @@ public class ChatService {
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(StartBluetoothFrag.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        public void write(byte buffer) {
+            try {
+                mmOutStream.write(buffer);
+                // Share the sent message back to the UI Activity
+//                mHandler.obtainMessage(StartBluetoothFrag.MESSAGE_WRITE, -1, -1, buffer)
+//                        .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
