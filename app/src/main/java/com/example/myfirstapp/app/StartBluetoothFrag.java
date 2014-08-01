@@ -40,30 +40,36 @@ public class StartBluetoothFrag extends Fragment {
     public static final int DEVICE_CONNECTED = 2;
     public static final int RESTART_BLUETOOTH = 3;
     public static final int NOT_CONNECTED = 4;
+
     // Key names received from the ChatService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
+
     //Debugging
     private static final String TAG = "StartBluetoothFrag";
+
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     // Member object for the chat services
     private ChatService mChatService = null;
+
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
+
     // Name of the connected device
     private String mConnectedDeviceName = null;
-    private Activity thisactivity;
-    private Button status_button;
+
+    //Handler given to the ChatService to do stuff
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 //            Log.e(TAG, "startbluetoothfrag handlemessage");
+            //Obtain first part of message... designates nature of message
             switch (msg.what) {
+                //If the message is that we have changed states, continue
+                //to find out what state to change to
                 case MESSAGE_STATE_CHANGE:
                     Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
@@ -125,8 +131,13 @@ public class StartBluetoothFrag extends Fragment {
             }
         }
     };
+
+    //Button and auxiliary items
+    private Button status_button;
     private Button scan_button;
     private Menu mMenu;
+
+    //Listener that connects with the main activity
     private startBluetoothFragListener mListener;
 
     public StartBluetoothFrag() {
@@ -141,6 +152,7 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Allows the fragment to place items in the activity options menu
         setHasOptionsMenu(true);
     }
 
@@ -151,6 +163,7 @@ public class StartBluetoothFrag extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_start_bluetooth, container, false);
 
+        //Sets up listeners for the buttons
         status_button = (Button) view.findViewById(R.id.button_status);
         status_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -164,6 +177,7 @@ public class StartBluetoothFrag extends Fragment {
                 scan();
             }
         });
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -188,11 +202,19 @@ public class StartBluetoothFrag extends Fragment {
                             }
                         });
                     }
-                    unregisterForContextMenu(status_button);
                     status_button.setText(R.string.start_bluetooth);
+                    //remove the 'scan for devices' button if present
                     scan_button.setVisibility(View.GONE);
-                    mListener.OnstartBluetoothFragInteraction(RESTART_BLUETOOTH);
+                    //removes the 'ensure discoverable' option from the
+                    //options menu as that should be only available with bluetooth on
                     mMenu.findItem(R.id.discoverable).setVisible(false);
+
+                    //unregister status button for long press leftover form
+                    //capabilities when there is a connected device
+                    unregisterForContextMenu(status_button);
+
+                    //lets the main activity know that we have to restart bluetooth
+                    mListener.OnstartBluetoothFragInteraction(RESTART_BLUETOOTH);
                 }
             }
         }
@@ -210,6 +232,7 @@ public class StartBluetoothFrag extends Fragment {
         }
     }
 
+    //lets the main activity know that we want to show the device list
     public void scan() {
         Log.e(TAG, "Scan Button Pressed");
         if (mListener != null) {
@@ -217,6 +240,8 @@ public class StartBluetoothFrag extends Fragment {
         }
     }
 
+    //communicates to the chatservice that the user has selected a device
+    //to connect to
     public void connect_device(int resultCode, String mac_address) {
         if (resultCode == Activity.RESULT_OK) {
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mac_address);
@@ -228,7 +253,6 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        thisactivity = activity;
         try {
             mListener = (startBluetoothFragListener) activity;
         } catch (ClassCastException e) {
@@ -255,6 +279,7 @@ public class StartBluetoothFrag extends Fragment {
         return false;
     }
 
+    //Sets up the context menu for long presses
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -280,11 +305,11 @@ public class StartBluetoothFrag extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        // Stop the Bluetooth chat services
+        // Stop the Bluetooth chat services when the activity stops
         if (mChatService != null) mChatService.stop();
-
         mListener = null;
     }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult " + resultCode);
@@ -409,6 +434,11 @@ public class StartBluetoothFrag extends Fragment {
         }
     }
 
+    public void scale_status_button(float X, float Y){
+        status_button.setScaleX(X);
+        status_button.setScaleY(Y);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -425,7 +455,6 @@ public class StartBluetoothFrag extends Fragment {
         public void startBluetoothFrag_MessageReceived(String device_name, String received_message);
 
         public void startBluetoothFrag_MakeToast(String toast_text);
-
     }
 
 }

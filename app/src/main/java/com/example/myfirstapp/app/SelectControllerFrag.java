@@ -16,16 +16,11 @@ public class SelectControllerFrag extends Fragment {
     public static final int BUTTON_CONTROL = 1;
     public static final int SLIDER_CONTROL = 2;
     public static final int MOTION_CONTROL = 3;
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private Button bt_chat;
     private Button button_control;
     private Button slider_control;
     private Button motion_control;
-
-    private String mParam1;
-    private String mParam2;
 
     private SelectControllerFragListener mListener;
 
@@ -33,30 +28,14 @@ public class SelectControllerFrag extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SelectControllerFrag.
-     */
     public static SelectControllerFrag newInstance(String param1, String param2) {
         SelectControllerFrag fragment = new SelectControllerFrag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override

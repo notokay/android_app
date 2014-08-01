@@ -33,6 +33,8 @@
     <string name="view_controllers">View Controllers</string>
     <string name="disconnect">Disconnect</string>
     <string name="disconnected">Device Disconnected</string>
+    <string name="turning_slider">Steering</string>
+    <string name="acc_slider">Acceleration</string>
 
     <!-- BluetoothChat -->
     <string name="send">Send</string>

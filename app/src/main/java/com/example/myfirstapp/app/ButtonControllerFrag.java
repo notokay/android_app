@@ -67,12 +67,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "up button is pressed down");
                         messageHandler.or_message(UP_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "up button is released");
                         messageHandler.xor_message(UP_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -87,12 +85,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "down button is pressed down");
                         messageHandler.or_message(DOWN_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "down button is released");
                         messageHandler.xor_message(DOWN_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -106,12 +102,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "left button is pressed down");
                         messageHandler.or_message(LEFT_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "left button is released");
                         messageHandler.xor_message(LEFT_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -126,12 +120,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "right button is pressed down");
                         messageHandler.or_message(RIGHT_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "right button is released");
                         messageHandler.xor_message(RIGHT_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -145,12 +137,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "start button is pressed down");
                         messageHandler.or_message(START_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "start button is released");
                         messageHandler.xor_message(START_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -164,12 +154,10 @@ public class ButtonControllerFrag extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         Log.e(TAG, "stop button is pressed down");
                         messageHandler.or_message(STOP_BUTTON);
-                        messageHandler.set_button(true);
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.e(TAG, "stop button is released");
                         messageHandler.xor_message(STOP_BUTTON);
-                        messageHandler.set_button(false);
                         break;
                 }
                 return false;
@@ -238,13 +226,6 @@ public class ButtonControllerFrag extends Fragment {
         private Boolean button_pressed = false;
         private Integer current_message = 0;
         private Boolean connection_status = false;
-
-        public void set_button(boolean butt_state){
-            Log.e(TAG, "set_button method called");
-            synchronized(button_pressed){
-                button_pressed = butt_state;
-            }
-        }
 
         public void or_message(int message){
             Log.e(TAG, "xor_message method called");
