@@ -3,8 +3,6 @@ package com.example.myfirstapp.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,29 +11,25 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 
-import java.util.BitSet;
-
 /**
  * Created by tommy on 7/24/14.
  */
 public class ButtonControllerFrag extends Fragment {
 
     private static final String TAG = "ButtonControllerFrag";
-
-    private Button up_button;
     private final static int UP_BUTTON = 1;
-    private Button down_button;
     private final static int DOWN_BUTTON = 2;
-    private Button left_button;
     private final static int LEFT_BUTTON = 4;
-    private Button right_button;
     private final static int RIGHT_BUTTON = 8;
-    private Button start_button;
     private final static int START_BUTTON = 16;
-    private Button stop_button;
     private final static int STOP_BUTTON = 32;
     private final int normalInterval = 100;
-    private View downView;
+    private Button up_button;
+    private Button down_button;
+    private Button left_button;
+    private Button right_button;
+    private Button start_button;
+    private Button stop_button;
     private MessageHandler messageHandler;
     private Boolean bt_connection_status;
 
@@ -210,16 +204,16 @@ public class ButtonControllerFrag extends Fragment {
         }
     }
 
-    public interface OnButtonControllerInteractionListener {
-        public void onButtonControllerInteraction(byte message);
-    }
-
-    public void change_status(Boolean cChange){
+    public void change_status(Boolean cChange) {
         Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
         bt_connection_status = cChange;
-        if(messageHandler != null){
+        if (messageHandler != null) {
             messageHandler.set_connected(cChange);
         }
+    }
+
+    public interface OnButtonControllerInteractionListener {
+        public void onButtonControllerInteraction(byte message);
     }
 
     private class MessageHandler extends Thread {

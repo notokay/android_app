@@ -3,7 +3,6 @@ package com.example.myfirstapp.app;
 import android.bluetooth.BluetoothAdapter;
 import android.os.Handler;
 
-import java.util.BitSet;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -14,11 +13,9 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.os.ParcelUuid;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Button;
 
 /**
  * Created by tommy on 7/20/14.
@@ -182,9 +179,9 @@ public class ChatService {
     private void connectionFailed() {
         setState(STATE_LISTEN);
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothChat.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(StartBluetoothFrag.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChat.TOAST, "Unable to connect device");
+        bundle.putString(StartBluetoothFrag.TOAST, "Unable to connect device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }

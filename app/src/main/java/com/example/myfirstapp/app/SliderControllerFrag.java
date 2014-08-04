@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -19,11 +18,11 @@ import android.widget.TextView;
 public class SliderControllerFrag extends Fragment{
 
     private static final String TAG = "SliderControllerFrag";
+    private final int normalInterval = 100;
     private View v;
     private SeekBar sb_acc;
     private SeekBar sb_turn;
     private Boolean bt_connection_status = false;
-    private final int normalInterval = 100;
     private MessageHandler messageHandler;
 
     private OnSliderControllerInteractionListener mListener;
@@ -109,20 +108,19 @@ public class SliderControllerFrag extends Fragment{
         }
     }
 
-    public interface OnSliderControllerInteractionListener {
-        public void onSliderControllerInteraction(String message);
-    }
-
-    public void change_status(Boolean cChange){
+    public void change_status(Boolean cChange) {
         Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
-        synchronized(bt_connection_status){
+        synchronized (bt_connection_status) {
             bt_connection_status = cChange;
         }
-        if(messageHandler != null){
+        if (messageHandler != null) {
             messageHandler.set_connected(cChange);
         }
     }
 
+    public interface OnSliderControllerInteractionListener {
+        public void onSliderControllerInteraction(String message);
+    }
 
     private class VerticalSliderListener implements OnSeekBarChangeListener{
         @Override

@@ -1,22 +1,12 @@
 package com.example.myfirstapp.app;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.bluetooth.BluetoothClass;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,10 +15,6 @@ import com.example.myfirstapp.app.R;
 public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.startBluetoothFragListener, DeviceListFrag.OnListPressedListener, SelectControllerFrag.SelectControllerFragListener, BtChatFrag.OnBtChatInteractionListener, ButtonControllerFrag.OnButtonControllerInteractionListener, SliderControllerFrag.OnSliderControllerInteractionListener, MotionControllerFrag.OnMotionControllerInteractionListener {
     //Debugging
     private static final String TAG = "HomeScreen";
-
-    //variables that help communicate what the current fragment
-    //in homescreen_frag is
-    private int current_frag;
     //Possible values for current_frag
     private static final int NULL = 0;
     private static final int STARTBLUETOOTHFRAG = 1;
@@ -36,9 +22,11 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     private static final int DEVICELISTFRAG = 5;
     private static final int CONTROLLER_SELECTED = 3;
     private static final int BTCHAT_SELECTED = 4;
-
     //defines the fragment manager, which is used to manage the fragments in this activity
     private final FragmentManager fragmentManager = getFragmentManager();
+    //variables that help communicate what the current fragment
+    //in homescreen_frag is
+    private int current_frag;
     private StartBluetoothFrag startBluetoothFrag;
 
     //boolean defining whether we are currently connected to a bluetooth device

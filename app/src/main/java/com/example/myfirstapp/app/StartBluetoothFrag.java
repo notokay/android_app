@@ -14,17 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import java.util.BitSet;
 
 public class StartBluetoothFrag extends Fragment {
     // Message types sent from the ChatService Handler
@@ -60,7 +53,12 @@ public class StartBluetoothFrag extends Fragment {
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
-
+    //Button and auxiliary items
+    private Button status_button;
+    private Button scan_button;
+    private Menu mMenu;
+    //Listener that connects with the main activity
+    private startBluetoothFragListener mListener;
     //Handler given to the ChatService to do stuff
     private final Handler mHandler = new Handler() {
         @Override
@@ -95,7 +93,7 @@ public class StartBluetoothFrag extends Fragment {
                             if (status_button.isClickable()) status_button.setClickable(false);
                             status_button.setText(R.string.title_not_connected);
                             //Let the main activity know that we are not connected
-                            if(mListener != null){
+                            if (mListener != null) {
                                 mListener.OnstartBluetoothFragInteraction(NOT_CONNECTED);
                             }
                             break;
@@ -115,12 +113,12 @@ public class StartBluetoothFrag extends Fragment {
                 case MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                    if(mListener != null){
+                    if (mListener != null) {
                         mListener.startBluetoothFrag_MakeToast("Connected to " + mConnectedDeviceName);
                     }
                     break;
                 case MESSAGE_TOAST:
-                    if(mListener != null){
+                    if (mListener != null) {
                         mListener.startBluetoothFrag_MakeToast(msg.getData().getString(TOAST));
                     }
                     break;
@@ -131,14 +129,6 @@ public class StartBluetoothFrag extends Fragment {
             }
         }
     };
-
-    //Button and auxiliary items
-    private Button status_button;
-    private Button scan_button;
-    private Menu mMenu;
-
-    //Listener that connects with the main activity
-    private startBluetoothFragListener mListener;
 
     public StartBluetoothFrag() {
         // Required empty public constructor
@@ -399,7 +389,7 @@ public class StartBluetoothFrag extends Fragment {
 
     public boolean sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+        if (mChatService.getState() != ChatService.STATE_CONNECTED) {
             if(mListener != null){
                 mListener.startBluetoothFrag_MakeToast(getString(R.string.not_connected));
             }
@@ -417,7 +407,7 @@ public class StartBluetoothFrag extends Fragment {
 
     public boolean sendMessage(byte message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+        if (mChatService.getState() != ChatService.STATE_CONNECTED) {
             if(mListener != null){
                 mListener.startBluetoothFrag_MakeToast(getString(R.string.not_connected));
             }

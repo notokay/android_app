@@ -1,57 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Home Screen -->
     <string name="app_name">Bluetooth Controller</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="edit_message">Enter a message</string>
-    <string name="button_send">Send</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_display_message">My Message</string>
-    <string name="action_search">Search</string>
-    <string name="title_activity_display_settings">DisplaySettings</string>
-    <string name="title_activity_display_search">DisplaySearch</string>
-    <string name="settings_text">This is the settings page</string>
-    <string name="search_text">This is the search page</string>
-    <string name="start_bluetooth">Start Bluetooth</string>
-    <string name="title_activity_remote_bluetooth">RemoteBluetooth</string>
-    <string name="title_activity_bluetooth_chat_service">BluetoothChatService</string>
-    <string name="connection_status">Connection Status</string>
-    <string name="restart_bluetooth">Restart Bluetooth</string>
-    <string name="device_list">Choose a Device</string>
-    <string name="bluetooth_chat">Bluetooth Chat</string>
-    <string name="launch_bt_chat">Launch Bluetooth Chat</string>
-    <string name="launch_button_controller">Buttons Controller</string>
-    <string name="launch_slider_controller">Slider Controller</string>
-    <string name="launch_motion_controller">Motion Controller</string>
-    <string name="up">Up</string>
-    <string name="down">Down</string>
-    <string name="left">Left</string>
-    <string name="right">Right</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
     <string name="view_controllers">View Controllers</string>
     <string name="disconnect">Disconnect</string>
+
+    <!-- Toast Messages -->
     <string name="disconnected">Device Disconnected</string>
-    <string name="turning_slider">Steering</string>
-    <string name="acc_slider">Acceleration</string>
+    <string name="not_connected">You are not connected to a device</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Controller.</string>
     <string name="sensor_not_detected">No sensor available</string>
 
-    <!-- BluetoothChat -->
-    <string name="send">Send</string>
-    <string name="not_connected">You are not connected to a device</string>
-    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
-    <string name="title_connecting">connecting...</string>
-    <string name="title_connected_to">Connected to: </string>
-    <string name="title_not_connected">not connected</string>
-    <!-- DeviceListActivity -->
-    <string name="scanning">scanning for devices...</string>
-    <string name="select_device">select a device to connect</string>
-    <string name="none_paired">No devices have been paired</string>
-    <string name="none_found">No devices found</string>
-    <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
-    <string name="button_scan">Scan for devices</string>
     <!-- Options Menu -->
     <string name="connect">Connect a device</string>
     <string name="discoverable">Make discoverable</string>
@@ -60,5 +21,46 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_samplefrag">samplefrag</string>
     <string name="title_activity_dummy">DummyActivity</string>
+
+    <!-- Start Bluetooth -->
+    <string name="start_bluetooth">Start Bluetooth</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="title_connecting">connecting...</string>
+    <string name="title_connected_to">Connected to: </string>
+    <string name="title_not_connected">not connected</string>
+    <string name="device_list">Choose a Device</string>
+
+    <!-- Device List -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <!-- Select Controller -->
+    <string name="launch_bt_chat">Launch Bluetooth Chat</string>
+    <string name="launch_button_controller">Buttons Controller</string>
+    <string name="launch_slider_controller">Slider Controller</string>
+    <string name="launch_motion_controller">Motion Controller</string>
+
+    <!-- BluetoothChat -->
+    <string name="bluetooth_chat">Bluetooth Chat</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="action_search">Search</string>
+
+    <!-- Button Controller -->
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+
+    <!-- Slider Controller & Motion Controller -->
+    <string name="turning_slider">Steering</string>
+    <string name="acc_slider">Acceleration</string>
 
 </resources>
