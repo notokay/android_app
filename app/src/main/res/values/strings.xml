@@ -35,6 +35,7 @@
     <string name="disconnected">Device Disconnected</string>
     <string name="turning_slider">Steering</string>
     <string name="acc_slider">Acceleration</string>
+    <string name="sensor_not_detected">No sensor available</string>
 
     <!-- BluetoothChat -->
     <string name="send">Send</string>

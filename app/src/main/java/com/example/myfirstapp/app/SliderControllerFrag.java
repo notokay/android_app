@@ -115,7 +115,9 @@ public class SliderControllerFrag extends Fragment{
 
     public void change_status(Boolean cChange){
         Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
-        bt_connection_status = cChange;
+        synchronized(bt_connection_status){
+            bt_connection_status = cChange;
+        }
         if(messageHandler != null){
             messageHandler.set_connected(cChange);
         }

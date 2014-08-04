@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.myfirstapp.app.R;
 
-public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.startBluetoothFragListener, DeviceListFrag.OnListPressedListener, SelectControllerFrag.SelectControllerFragListener, BtChatFrag.OnBtChatInteractionListener, ButtonControllerFrag.OnButtonControllerInteractionListener, SliderControllerFrag.OnSliderControllerInteractionListener {
+public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.startBluetoothFragListener, DeviceListFrag.OnListPressedListener, SelectControllerFrag.SelectControllerFragListener, BtChatFrag.OnBtChatInteractionListener, ButtonControllerFrag.OnButtonControllerInteractionListener, SliderControllerFrag.OnSliderControllerInteractionListener, MotionControllerFrag.OnMotionControllerInteractionListener {
     //Debugging
     private static final String TAG = "HomeScreen";
 
@@ -39,6 +39,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
 
     //defines the fragment manager, which is used to manage the fragments in this activity
     private final FragmentManager fragmentManager = getFragmentManager();
+    private StartBluetoothFrag startBluetoothFrag;
 
     //boolean defining whether we are currently connected to a bluetooth device
     private Boolean connection_status = false;
@@ -54,6 +55,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
 
         //sets up what is to be displayed in this activity
         setContentView(R.layout.activity_home_screen);
+        startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
     }
 
 
@@ -157,9 +159,11 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
                         SliderControllerFrag sliderControllerFrag = (SliderControllerFrag) fragmentManager.findFragmentById(R.id.homescreen_frag);
                         sliderControllerFrag.change_status(connection_status);
                         return;
+                    } else if(current_frag_tag.equals("motionControllerFrag")){
+                        MotionControllerFrag motionControllerFrag = (MotionControllerFrag) fragmentManager.findFragmentById(R.id.homescreen_frag);
+                        motionControllerFrag.change_conncetion_status(connection_status);
                     }
-
-                }
+               }
                 break;
         }
     }
@@ -169,7 +173,6 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     //who then initiates the connection
     public void OnListPressed(int result_code, String mac_address) {
         Log.e(TAG, "device selected to connect");
-        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
         startBluetoothFrag.connect_device(result_code, mac_address);
     }
 
@@ -177,7 +180,6 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     //which controller to proceed to
     public void selectFrag(int controller_code) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
         switch (controller_code) {
             case (SelectControllerFrag.BT_CHAT):
                 BtChatFrag btChatFrag = new BtChatFrag();
@@ -219,7 +221,8 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
                 fragmentTransaction.replace(R.id.homescreen_frag, motionControllerFrag, "motionControllerFrag");
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                motionControllerFrag.change_conncetion_status(connection_status);
                 startBluetoothFrag.scale_status_button((float)0.5, (float)0.5);
                 current_frag = CONTROLLER_SELECTED;
                 break;
@@ -243,7 +246,6 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
                 if (fragmentManager.getBackStackEntryCount() > 0) {
                     current_frag = NULL;
                     fragmentManager.popBackStack();
-                    StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
                     startBluetoothFrag.scale_status_button((float)1.0, (float)1.0);
                     //most of the controllers have landscape orientation so when returning
                     //to the select controller screen we want to return the screen orientation
@@ -267,7 +269,6 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
 
     public boolean onBtChatInteraction(String message) {
         //Allows bluetooth chat to tell the startBluetoothFrag what message it wishes to send
-        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
         return startBluetoothFrag.sendMessage(message);
     }
 
@@ -282,18 +283,27 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     //Method called by the Button Controller to send a command through bluetooth to the connected device
     //through startBluetoothFrag
     public void onButtonControllerInteraction(byte message) {
-        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
         startBluetoothFrag.sendMessage(message);
     }
 
     public void onSliderControllerInteraction(String message){
-        StartBluetoothFrag startBluetoothFrag = (StartBluetoothFrag) fragmentManager.findFragmentById(R.id.start_bluetooth_frag);
         startBluetoothFrag.sendMessage(message);
     }
 
     //method that is called whenever the startBluetoothFrag wants to make a toast
     //ensures that the toast is made on the UI thread to prevent the app from crashing
     public void startBluetoothFrag_MakeToast(final String toast_text){
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplication(), toast_text, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onMotionControllerInteraction(String message){
+        startBluetoothFrag.sendMessage(message);
+    }
+    public void motionControllerFrag_make_toast(final String toast_text){
         this.runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(getApplication(), toast_text, Toast.LENGTH_SHORT).show();
