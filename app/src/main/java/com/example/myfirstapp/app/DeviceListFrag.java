@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/20/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
@@ -24,9 +28,18 @@ import java.util.Set;
 public class DeviceListFrag extends Fragment {
     // Debugging
     private static final String TAG = "DeviceListActivity";
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static boolean D = false;
+
+    //Access to layout
+    private View mView;
+    private Button scanButton;
+
+    // Member fields
+    private BluetoothAdapter mBtAdapter;
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
+    private OnListPressedListener mPressedListener;
+
     // The BroadcastReceiver that listens for discovered devices and
     // changes the title when discovery is finished
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -53,14 +66,7 @@ public class DeviceListFrag extends Fragment {
             }
         }
     };
-    //access to layout
-    private View mView;
-    private Button scanButton;
-    // Member fields
-    private BluetoothAdapter mBtAdapter;
-    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
-    private ArrayAdapter<String> mNewDevicesArrayAdapter;
-    private OnListPressedListener mPressedListener;
+
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             Log.e(TAG, "devicelistfrag item clicked");
@@ -73,7 +79,7 @@ public class DeviceListFrag extends Fragment {
 
             // Set result and finish this Activity
             if (mPressedListener != null) {
-                mPressedListener.OnListPressed(Activity.RESULT_OK, address);
+                mPressedListener.deviceListFrag_OnListPressed(Activity.RESULT_OK, address);
             }
         }
     };
@@ -85,17 +91,10 @@ public class DeviceListFrag extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment DeviceListFrag.
      */
     public static DeviceListFrag newInstance(String param1, String param2) {
         DeviceListFrag fragment = new DeviceListFrag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -107,8 +106,13 @@ public class DeviceListFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e(TAG, "devicelistfrag oncreateview");
+        //Debugging
+        if(D) Log.e(TAG, "onCreateview");
+
         View view = inflater.inflate(R.layout.fragment_devicelist, container, false);
+        mView = view;
+
+        //Set up listener for scan button
         scanButton = (Button) view.findViewById(R.id.button_scan);
         scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -117,7 +121,8 @@ public class DeviceListFrag extends Fragment {
             }
         });
 
-        mView = view;
+        // Get the local Bluetooth adapter
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
@@ -142,9 +147,6 @@ public class DeviceListFrag extends Fragment {
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         getActivity().registerReceiver(mReceiver, filter);
 
-        // Get the local Bluetooth adapter
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
@@ -165,7 +167,7 @@ public class DeviceListFrag extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.e(TAG, "devicelistfrag onattach");
+        if(D) Log.e(TAG, "onAttach");
         try {
             mPressedListener = (OnListPressedListener) activity;
         } catch (ClassCastException e) {
@@ -194,7 +196,7 @@ public class DeviceListFrag extends Fragment {
      * Start device discover with the BluetoothAdapter
      */
     private void doDiscovery() {
-        Log.d(TAG, "doDiscovery()");
+        if(D) Log.d(TAG, "doDiscovery()");
 
         if (mNewDevicesArrayAdapter.getCount() > 0) {
             mNewDevicesArrayAdapter.clear();
@@ -215,18 +217,8 @@ public class DeviceListFrag extends Fragment {
         mBtAdapter.startDiscovery();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListPressedListener {
-        public void OnListPressed(int result_code, String mac_address);
+        public void deviceListFrag_OnListPressed(int result_code, String mac_address);
     }
 
 }
