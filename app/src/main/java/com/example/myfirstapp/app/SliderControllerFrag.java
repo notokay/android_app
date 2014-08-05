@@ -21,7 +21,7 @@ public class SliderControllerFrag extends Fragment{
     private static boolean D = false;
 
     //how much time to wait before each message
-    private final int normalInterval = 100;
+    private int normalInterval = 100;
     //Defines whether we are connected or not
     private Boolean mmConnectionStatus = false;
 
@@ -95,6 +95,7 @@ public class SliderControllerFrag extends Fragment{
         if(messageHandler != null){
             messageHandler.set_connected(mmConnectionStatus);
         }
+        normalInterval = ((HomeScreen)getActivity()).getNormalInterval();
     }
 
     @Override

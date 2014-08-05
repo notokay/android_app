@@ -18,6 +18,15 @@
     <string name="view_controllers">View Controllers</string>
     <string name="action_help">Help</string>
 
+    <!-- Settings -->
+    <string name="pref_general">General</string>
+    <string name="pref_bluetooth_on_startup">Start Bluetooth at Launch</string>
+    <string name="pref_bluetooth_on_startup_key">pref_bluetooth_on_startup</string>
+    <string name="pref_sending_frequency_key">pref_sending_frequency</string>
+    <string name="pref_sending_frequency">Sending Frequency</string>
+    <string name="pref_sending_frequency_default">100</string>
+    <string name="pref_sending_frequency_summary">100 ms</string>
+
     <!-- Start Bluetooth -->
     <string name="start_bluetooth">Start Bluetooth</string>
     <string name="connect">Connect a device</string>
@@ -27,6 +36,7 @@
     <string name="title_connected_to">Connected to: </string>
     <string name="title_not_connected">not connected</string>
     <string name="device_list">Choose a Device</string>
+    <string name="not_currently_available">Not currently available. Please go back.</string>
 
     <!-- Device List -->
     <string name="scanning">scanning for devices...</string>

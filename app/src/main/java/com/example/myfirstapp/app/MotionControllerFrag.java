@@ -36,7 +36,7 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
     private View v;
 
     private Boolean mmConnectionStatus = false;
-    private final int normalInterval = 100;
+    private int normalInterval = 100;
     private MessageHandler messageHandler;
 
     private OnMotionControllerInteractionListener mListener;
@@ -109,6 +109,7 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
         if(messageHandler != null){
             messageHandler.set_connected(mmConnectionStatus);
         }
+        normalInterval = ((HomeScreen)getActivity()).getNormalInterval();
     }
 
     @Override

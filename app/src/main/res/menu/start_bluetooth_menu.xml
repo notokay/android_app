@@ -14,5 +14,6 @@
         android:id="@+id/discoverable"
         android:icon="@android:drawable/ic_menu_mylocation"
         android:title="@string/discoverable"
+        android:orderInCategory="1"
         android:visible="false" />
 </menu>

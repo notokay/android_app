@@ -8,10 +8,12 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +101,7 @@ public class StartBluetoothFrag extends Fragment {
                         case ChatService.STATE_NONE:
                             //Sets up the status bar to display connection status
                             if (mStatusButton.isClickable()) mStatusButton.setClickable(false);
+                            mStatusButton.setEnabled(false);
                             mStatusButton.setText(R.string.title_not_connected);
                             //Let the main activity know that we are not connected
                             if (mListener != null) {
@@ -178,8 +181,10 @@ public class StartBluetoothFrag extends Fragment {
         //mScanButton always disappears after you click on it
         mScanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mScanButton.setVisibility(View.GONE);
-                scan();
+                if (((HomeScreen) getActivity()).get_current_frag() == HomeScreen.NULL){
+                    mScanButton.setVisibility(View.GONE);
+                    scan();
+                }else mListener.startBluetoothFrag_MakeToast(getResources().getString(R.string.not_currently_available));
             }
         });
 
@@ -255,6 +260,13 @@ public class StartBluetoothFrag extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         mMenu = menu;
         inflater.inflate(R.menu.start_bluetooth_menu, menu);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean bluetooth_on_startup = sharedPref.getBoolean("pref_bluetooth_on_startup", true);
+        Log.e(TAG, "onCreateOptionsMenu");
+        if(bluetooth_on_startup){
+            start_bluetooth();
+        }
     }
 
     @Override
@@ -322,12 +334,7 @@ public class StartBluetoothFrag extends Fragment {
     //Starts the activities to establish bluetooth connection
     private void start_bluetooth() {
         //Debugging
-        if(D) Log.e(TAG, "start_bluetooth");
-
-        //Configures button to show connection status
-        mStatusButton.setClickable(false);
-        mStatusButton.setText(R.string.connection_status);
-        mStatusButton.setEnabled(false);
+        Log.e(TAG, "start_bluetooth");
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

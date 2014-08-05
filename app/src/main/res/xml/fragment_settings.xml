@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <PreferenceCategory
+        android:title="@string/pref_general" />
+    <CheckBoxPreference
+        android:key="@string/pref_bluetooth_on_startup_key"
+        android:title="@string/pref_bluetooth_on_startup"
+        android:defaultValue="true" />
+    <EditTextPreference
+        android:key="@string/pref_sending_frequency_key"
+        android:title="@string/pref_sending_frequency"
+        android:inputType="number"
+        android:defaultValue="@string/pref_sending_frequency_default"
+        android:summary="@string/pref_sending_frequency_summary"/>
+
+</PreferenceScreen>

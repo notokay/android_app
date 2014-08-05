@@ -38,7 +38,7 @@ public class ButtonControllerFrag extends Fragment {
     private Button stop_button;
 
     //Time between each message
-    private final int normalInterval = 100;
+    private int normalInterval = 100;
 
     //Thread in charge of sending messages
     private MessageHandler messageHandler;
@@ -203,6 +203,7 @@ public class ButtonControllerFrag extends Fragment {
         if(messageHandler != null){
             messageHandler.set_connected(mmConnectionStatus);
         }
+        normalInterval = ((HomeScreen)getActivity()).getNormalInterval();
     }
 
         @Override
