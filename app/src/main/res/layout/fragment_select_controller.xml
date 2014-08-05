@@ -17,7 +17,6 @@
         android:onClick="launch_bt_chat"
         android:text="@string/launch_bt_chat" />
 
-
     <Button
         android:id="@+id/launch_button_controller"
         android:layout_width="fill_parent"

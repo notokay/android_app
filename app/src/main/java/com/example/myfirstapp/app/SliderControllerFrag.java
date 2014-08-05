@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/24/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
@@ -11,22 +15,25 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-
-/**
- * Created by tommy on 7/24/14.
- */
 public class SliderControllerFrag extends Fragment{
-
+    //Debugging
     private static final String TAG = "SliderControllerFrag";
+    private static boolean D = false;
+
+    //how much time to wait before each message
     private final int normalInterval = 100;
+    //Defines whether we are connected or not
+    private Boolean mmConnectionStatus = false;
+
     private View v;
+    //Sets up the scrollbars
     private SeekBar sb_acc;
     private SeekBar sb_turn;
-    private Boolean bt_connection_status = false;
+
+    //Thread in charge of sending messages
     private MessageHandler messageHandler;
 
     private OnSliderControllerInteractionListener mListener;
-
 
     public SliderControllerFrag() {
         // Required empty public constructor
@@ -47,6 +54,7 @@ public class SliderControllerFrag extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_slider_controls, container, false);
         v = view;
+
         //Configure seekbar
         sb_turn = (SeekBar)view.findViewById(R.id.slider_turning);
         sb_turn.setMax(1000);
@@ -58,9 +66,10 @@ public class SliderControllerFrag extends Fragment{
         sb_acc.setProgress(500);
         sb_acc.setOnSeekBarChangeListener(new VerticalSliderListener());
 
+        //Starts thread that sends messages
         messageHandler = new MessageHandler();
         if(messageHandler != null){
-            messageHandler.set_connected(bt_connection_status);
+            messageHandler.set_connected(mmConnectionStatus);
         }
         messageHandler.start();
 
@@ -82,8 +91,9 @@ public class SliderControllerFrag extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        //Updates current connection status for the thread on resume
         if(messageHandler != null){
-            messageHandler.set_connected(bt_connection_status);
+            messageHandler.set_connected(mmConnectionStatus);
         }
     }
 
@@ -101,17 +111,17 @@ public class SliderControllerFrag extends Fragment{
 
 
     private void sendCommand(Integer message) {
-        synchronized(bt_connection_status){
-            if(bt_connection_status && mListener != null){
+        synchronized(mmConnectionStatus){
+            if(mmConnectionStatus && mListener != null){
                 mListener.onSliderControllerInteraction(message.toString());
             }
         }
     }
 
-    public void change_status(Boolean cChange) {
-        Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
-        synchronized (bt_connection_status) {
-            bt_connection_status = cChange;
+    public void change_connection_status(Boolean cChange) {
+        if(D) Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
+        synchronized (mmConnectionStatus) {
+            mmConnectionStatus = cChange;
         }
         if (messageHandler != null) {
             messageHandler.set_connected(cChange);
@@ -180,7 +190,7 @@ public class SliderControllerFrag extends Fragment{
         }
 
         public void set_connected(Boolean cstatus){
-            Log.e(TAG, "set connected status");
+            if(D) Log.e(TAG, "set connected status");
             synchronized(connection_status){
                 connection_status = cstatus;
             }
@@ -188,7 +198,7 @@ public class SliderControllerFrag extends Fragment{
 
         @Override
         public void run() {
-            Log.e(TAG, "messaghandler run method called");
+            if(D) Log.e(TAG, "messaghandler run method called");
             while (connection_status) {
                 try {
                     current_message = 0;

@@ -12,5 +12,5 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:padding="5dip"
     android:textSize="18sp" />

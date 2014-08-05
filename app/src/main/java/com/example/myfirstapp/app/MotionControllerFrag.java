@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/24/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
@@ -16,24 +20,22 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import java.lang.Math;
 
-/**
- * Created by tommy on 7/24/14.
- */
 public class MotionControllerFrag extends Fragment implements SensorEventListener {
-    private final String TAG = "MotionControllerFrag";
+    //Debugging
+    private static final String TAG = "MotionControllerFrag";
+    private static boolean D = false;
 
+    //Member variables for sensor management
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private Boolean sensor_exists = false;
-    private static final float NS2S = 1.0f / 1000000000.0f;
-    private final float[] deltaRotationVector = new float[4];
-    private float timestamp;
 
+    //Configuring UI elements
     private SeekBar sb_acc;
     private SeekBar sb_turn;
     private View v;
 
-    private Boolean bt_connection_status = false;
+    private Boolean mmConnectionStatus = false;
     private final int normalInterval = 100;
     private MessageHandler messageHandler;
 
@@ -68,21 +70,21 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
         sb_acc.setProgress(500);
         sb_acc.setOnSeekBarChangeListener(new VerticalSliderListener());
 
-        Log.e(TAG, "start sensor detection");
+        if(D) Log.e(TAG, "start sensor detection");
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         if(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null){
             mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
             sensor_exists = true;
-            Log.e(TAG, "sensor exists");
+            if(D) Log.e(TAG, "sensor exists");
         }
         else {
             mListener.motionControllerFrag_make_toast(getResources().getString(R.string.sensor_not_detected));
-            Log.e(TAG, "no sensor");
+            if(D)Log.e(TAG, "no sensor");
             sensor_exists = false;
         }
 
         messageHandler = new MessageHandler();
-        if(messageHandler != null) messageHandler.set_connected(bt_connection_status);
+        if(messageHandler != null) messageHandler.set_connected(mmConnectionStatus);
         messageHandler.start();
 
         return view;
@@ -103,9 +105,9 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
     public void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
-        Log.e(TAG, "sensor registered");
+        if(D) Log.e(TAG, "sensor registered");
         if(messageHandler != null){
-            messageHandler.set_connected(bt_connection_status);
+            messageHandler.set_connected(mmConnectionStatus);
         }
     }
 
@@ -131,19 +133,20 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
         float[] deltaRotationMatrix = new float[9];
         float[] orientation = new float[3];
 
-        // This timestep's delta rotation to be multiplied by the current rotation
-        // after computing it from the gyro sample data.
-        Log.e(TAG, "Sensor timestamp" + ((Long)event.timestamp).toString());
+        //Convert from quaternions to rotation matrix
         SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, event.values);
+        //Obtain current orientation from rotation matrix
         SensorManager.getOrientation(deltaRotationMatrix, orientation);
+        //Convert from radians to degrees
         Integer current_rotation = (int)(orientation[1]*(180/Math.PI));
-        // User code should concatenate the delta rotation we computed with the current rotation
-        // in order to get the updated rotation.
-        // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+
+        //Update UI of scrollbar progress
         sb_turn.setProgress(current_rotation+90);
-        if(messageHandler != null) messageHandler.set_turning_message(current_rotation+90);
         TextView tv = (TextView)v.findViewById(R.id.percent_turning);
         tv.setText(Integer.toString(current_rotation));
+
+        //Update the current value of orientation that the thread will send
+        if(messageHandler != null) messageHandler.set_turning_message(current_rotation+90);
     }
 
     public interface OnMotionControllerInteractionListener {
@@ -169,10 +172,10 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
         }
     }
 
-    public void change_conncetion_status(Boolean cChange){
+    public void change_connection_status(Boolean cChange){
         Log.e(TAG, "attempt to change current connection_status for motioncontroller to" + cChange.toString());
-        synchronized(bt_connection_status){
-            bt_connection_status = cChange;
+        synchronized(mmConnectionStatus){
+            mmConnectionStatus = cChange;
         }
         if(messageHandler != null){
             messageHandler.set_connected(cChange);
@@ -180,8 +183,8 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
     }
 
     private void sendCommand(Integer message) {
-        synchronized(bt_connection_status){
-            if(bt_connection_status && mListener != null){
+        synchronized(mmConnectionStatus){
+            if(mmConnectionStatus && mListener != null){
                 mListener.onMotionControllerInteraction(message.toString());
             }
         }
@@ -214,7 +217,6 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
 
         @Override
         public void run() {
-            Log.e(TAG, "messaghandler run method called");
             while (connection_status) {
                 try {
                     current_message = 0;
@@ -233,7 +235,5 @@ public class MotionControllerFrag extends Fragment implements SensorEventListene
             }
         }
     };
-
-
 
 }

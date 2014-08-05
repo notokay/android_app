@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/24/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
@@ -15,12 +19,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-/**
- * Created by tommy on 7/24/14.
- */
 public class BtChatFrag extends Fragment {
     //Debugging
     private static final String TAG = "BtChatFrag";
+    private static boolean D = false;
+
     private TextView.OnEditorActionListener mWriteListener =
             new TextView.OnEditorActionListener() {
                 public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -29,7 +32,7 @@ public class BtChatFrag extends Fragment {
                         String message = view.getText().toString();
                         sendMessage(message);
                     }
-                    Log.i(TAG, "END onEditorAction");
+                    if(D) Log.i(TAG, "END onEditorAction");
                     return true;
                 }
             };
@@ -112,12 +115,14 @@ public class BtChatFrag extends Fragment {
                 // Reset out string buffer to zero and clear the edit text field
                 mOutStringBuffer.setLength(0);
                 mOutEditText.setText(mOutStringBuffer);
+                // Display the new message in the conversation
                 mConversationArrayAdapter.add("Me:  " + message);
             }
             ;
         }
     }
 
+    //Display the new received message in the conversation
     public void receive_message(String device_name, String received_message) {
         mConversationArrayAdapter.add(device_name + ":  " + received_message);
     }

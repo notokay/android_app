@@ -1,20 +1,30 @@
+/**
+ * Created by tommy on 7/24/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
 public class SelectControllerFrag extends Fragment {
+    //Debugging
+    private static final String TAG = "SelectControllerFrag";
+    private static boolean D = false;
+
+    //Controller codes defining which controller has been selected
     public static final int BT_CHAT = 0;
     public static final int BUTTON_CONTROL = 1;
     public static final int SLIDER_CONTROL = 2;
     public static final int MOTION_CONTROL = 3;
 
+    //Buttons for the different controllers
     private Button bt_chat;
     private Button button_control;
     private Button slider_control;
@@ -39,7 +49,12 @@ public class SelectControllerFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Debugging
+        if(D) Log.e(TAG, "onCreateView");
+
         View view = inflater.inflate(R.layout.fragment_select_controller, container, false);
+
+        //Configure buttons
         bt_chat = (Button) view.findViewById(R.id.launch_bt_chat);
         bt_chat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -87,22 +102,11 @@ public class SelectControllerFrag extends Fragment {
 
     private void select_controller(int controller_code) {
         if (mListener != null) {
-            mListener.selectFrag(controller_code);
+            mListener.selectControllerFrag_selectFrag(controller_code);
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface SelectControllerFragListener {
-        public void selectFrag(int controller_code);
+        public void selectControllerFrag_selectFrag(int controller_code);
     }
-
 }

@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/24/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
@@ -11,27 +15,36 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 
-/**
- * Created by tommy on 7/24/14.
- */
 public class ButtonControllerFrag extends Fragment {
 
+    //Debugging
     private static final String TAG = "ButtonControllerFrag";
+    private static boolean D = false;
+
+    //Values for buttons (assigned for bit purposes)
     private final static int UP_BUTTON = 1;
     private final static int DOWN_BUTTON = 2;
     private final static int LEFT_BUTTON = 4;
     private final static int RIGHT_BUTTON = 8;
     private final static int START_BUTTON = 16;
     private final static int STOP_BUTTON = 32;
-    private final int normalInterval = 100;
+
+    //Buttons for each action
     private Button up_button;
     private Button down_button;
     private Button left_button;
     private Button right_button;
     private Button start_button;
     private Button stop_button;
+
+    //Time between each message
+    private final int normalInterval = 100;
+
+    //Thread in charge of sending messages
     private MessageHandler messageHandler;
-    private Boolean bt_connection_status;
+
+    //Communicates whether we are connected to bluetooth or not
+    private Boolean mmConnectionStatus;
 
     private OnButtonControllerInteractionListener mListener;
 
@@ -52,7 +65,12 @@ public class ButtonControllerFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Debugging
+        if(D) Log.e(TAG, "onCreateView");
+
         final View view = inflater.inflate(R.layout.fragment_button_controls, container, false);
+
+        //Configure buttons
         up_button = (Button) view.findViewById(R.id.up);
         up_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -157,11 +175,14 @@ public class ButtonControllerFrag extends Fragment {
                 return false;
             }
         });
+
+        //Start thread to start sending command messages
         messageHandler = new MessageHandler();
         if(messageHandler != null){
-            messageHandler.set_connected(bt_connection_status);
+            messageHandler.set_connected(mmConnectionStatus);
         }
         messageHandler.start();
+
         return view;
     }
 
@@ -180,7 +201,7 @@ public class ButtonControllerFrag extends Fragment {
     public void onResume() {
         super.onResume();
         if(messageHandler != null){
-            messageHandler.set_connected(bt_connection_status);
+            messageHandler.set_connected(mmConnectionStatus);
         }
     }
 
@@ -196,17 +217,20 @@ public class ButtonControllerFrag extends Fragment {
         mListener = null;
     }
 
+    //if we are connected, have the main activity tell the bluetooth to send the message
     private void sendCommand(int message) {
-        synchronized(bt_connection_status){
-            if(bt_connection_status && mListener != null){
+        synchronized(mmConnectionStatus){
+            if(mmConnectionStatus && mListener != null){
                 mListener.onButtonControllerInteraction((byte)message);
             }
         }
     }
 
-    public void change_status(Boolean cChange) {
-        Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
-        bt_connection_status = cChange;
+    //Public method allowing the main activity to update connection status
+    public void change_connection_status(Boolean cChange) {
+        if(D) Log.e(TAG, "attempt to change current connection_status for buttoncontroller to" + cChange.toString());
+        mmConnectionStatus = cChange;
+        //Update the thread as well, because it only loops when we are connected
         if (messageHandler != null) {
             messageHandler.set_connected(cChange);
         }
@@ -217,26 +241,25 @@ public class ButtonControllerFrag extends Fragment {
     }
 
     private class MessageHandler extends Thread {
-        private Boolean button_pressed = false;
         private Integer current_message = 0;
         private Boolean connection_status = false;
 
         public void or_message(int message){
-            Log.e(TAG, "xor_message method called");
+            if(D) Log.e(TAG, "xor_message method called");
             synchronized (current_message){
                 current_message |= message;
             }
         }
 
         public void xor_message(int message){
-            Log.e(TAG, "xor_message method called");
+            if(D) Log.e(TAG, "xor_message method called");
             synchronized(current_message){
                 current_message ^= message;
             }
         }
 
         public void set_connected(Boolean cstatus){
-            Log.e(TAG, "set connected status");
+            if(D) Log.e(TAG, "set connected status");
             synchronized(connection_status){
                 connection_status = cstatus;
             }
@@ -244,7 +267,6 @@ public class ButtonControllerFrag extends Fragment {
 
         @Override
         public void run() {
-            Log.e(TAG, "messaghandler run method called");
             while (connection_status) {
                 try {
                     synchronized(current_message){

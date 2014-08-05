@@ -1,3 +1,7 @@
+/**
+ * Created by tommy on 7/20/14.
+ */
+
 package com.example.myfirstapp.app;
 
 import android.bluetooth.BluetoothAdapter;
@@ -17,36 +21,38 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
-/**
- * Created by tommy on 7/20/14.
- */
 public class ChatService {
+    // Debugging
+    private static final String TAG = "ChatService";
+    private static final boolean D = true;
 
+    private int mState;
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
-    // Debugging
-    private static final String TAG = "ChatService";
-    private static final boolean D = true;
+
     // Name for the SDP record when creating server socket
-    private static final String NAME = "BluetoothChat";
-    // Unique UUID for this application
+    private static final String NAME = "BluetoothController";
+
+    // Generic UUID for serial communications
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    //57ECE756-E0F7-5BBA-9FE4-5AEB1B92E4C9
-    //00001101-0000-1000-8000-00805F9B34FB
+
     // Member fields
     private final BluetoothAdapter mAdapter;
+
+    //Handler for communicating with startBluetoothFrag
     private final Handler mHandler;
+
+    //Fields for the threads
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
-    private int mState;
 
     //Constructor, called during setupService()
     public ChatService(Context context, Handler handler) {
-        Log.e(TAG, "ChatService initialized");
+        if(D) Log.e(TAG, "ChatService initialized");
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler; //the handler sends messages back to the main UI activity
@@ -65,6 +71,7 @@ public class ChatService {
         mHandler.obtainMessage(StartBluetoothFrag.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
+    //Allows for an AcceptThread to be started, which initiates sockets for bluetooth connections
     //start() is called during onResume of main activity if state is STATE_NONE
     //it is also called if the ConnectThread connection with a device fails, thus
     //requiring restart
@@ -93,7 +100,7 @@ public class ChatService {
 
     /**
      * Start the ConnectThread to initiate a connection to a remote device.
-     * called when the scan option in the option menu is pressed
+     * Called when a device in the device list is selected
      *
      * @param device The BluetoothDevice to connect
      */
@@ -117,8 +124,11 @@ public class ChatService {
         setState(STATE_CONNECTING);
     }
 
+    //Attempts to manually disconnect from a currently connected device
     public synchronized void disconnect() {
-        Log.e(TAG, "attempted disconnect in mChatService");
+        if(D) Log.e(TAG, "attempted disconnect in mChatService");
+
+        //Closes the incoming and outgoing data streams
         if (mConnectedThread.mmInStream != null) {
             try {
                 mConnectedThread.mmInStream.close();
@@ -134,7 +144,6 @@ public class ChatService {
         }
 
         stop();
-        Log.e(TAG, "disconnected in mChatService");
     }
 
     /**

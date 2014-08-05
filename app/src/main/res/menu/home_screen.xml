@@ -4,15 +4,20 @@
     tools:context="com.example.myfirstapp.app.HomeScreen">
 
     <!-- Settings, should always be in the overflow -->
-    <item
-        android:id="@+id/action_settings"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_settings" />
 
     <item
         android:id="@+id/view_controllers"
         android:showAsAction="never"
         android:title="@string/view_controllers" />
 
+    <item
+        android:id="@+id/action_settings"
+        android:showAsAction="never"
+        android:title="@string/action_settings" />
+
+    <item
+        android:id="@+id/action_help"
+        android:showAsAction="never"
+        android:title="@string/action_help" />
 
 </menu>

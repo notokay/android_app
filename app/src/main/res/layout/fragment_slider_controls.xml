@@ -33,6 +33,7 @@
                 android:id="@+id/slider_turning"
                 android:progressDrawable="@drawable/progress_drawable"
                 android:thumb="@drawable/thumb_drawable"/>
+
             <TextView
                 android:paddingTop="10dip"
                 android:layout_width="fill_parent"
@@ -45,20 +46,20 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-
         </RelativeLayout>
 
-
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1">
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_alignParentTop="true"
@@ -93,8 +94,7 @@
                 android:id="@+id/percent_acc"/>
 
         </RelativeLayout>
+
     </LinearLayout>
-
-
 
 </LinearLayout>
