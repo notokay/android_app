@@ -5,13 +5,19 @@
 package com.example.myfirstapp.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectControllerFrag extends Fragment {
     //Debugging
@@ -29,6 +35,10 @@ public class SelectControllerFrag extends Fragment {
     private Button button_control;
     private Button slider_control;
     private Button motion_control;
+
+    List<Controller_Button> mControllerList;
+    private ControllersArrayAdapter mControllerArrayAdapter;
+    private ListView mControllerView;
 
     private SelectControllerFragListener mListener;
 
@@ -54,31 +64,27 @@ public class SelectControllerFrag extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_select_controller, container, false);
 
-        //Configure buttons
-        bt_chat = (Button) view.findViewById(R.id.launch_bt_chat);
-        bt_chat.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                select_controller(BT_CHAT);
-            }
-        });
-        button_control = (Button) view.findViewById(R.id.launch_button_controller);
-        button_control.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                select_controller(BUTTON_CONTROL);
-            }
-        });
-        slider_control = (Button) view.findViewById(R.id.launch_slider_controller);
-        slider_control.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                select_controller(SLIDER_CONTROL);
-            }
-        });
-        motion_control = (Button) view.findViewById(R.id.launch_motion_controller);
-        motion_control.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                select_controller(MOTION_CONTROL);
-            }
-        });
+        String[] titles = new String[]{
+                getResources().getString(R.string.launch_bt_chat),
+                getResources().getString(R.string.launch_button_controller),
+                getResources().getString(R.string.launch_slider_controller),
+                getResources().getString(R.string.launch_motion_controller)
+        };
+        Integer[] controller_id = new Integer[]{
+                BT_CHAT,
+                BUTTON_CONTROL,
+                SLIDER_CONTROL,
+                MOTION_CONTROL
+        };
+
+        mControllerList = new ArrayList<Controller_Button>();
+        for(int i = 0; i < titles.length; i++){
+            Controller_Button controllerButton = new Controller_Button(titles[i], controller_id[i]);
+            mControllerList.add(controllerButton);
+        }
+        mControllerView = (ListView) view.findViewById(R.id.controllers_list);
+        mControllerArrayAdapter = new ControllersArrayAdapter(getActivity(), R.layout.controller_button, mControllerList);
+        mControllerView.setAdapter(mControllerArrayAdapter);
 
         return view;
     }
@@ -108,5 +114,57 @@ public class SelectControllerFrag extends Fragment {
 
     public interface SelectControllerFragListener {
         public void selectControllerFrag_selectFrag(int controller_code);
+    }
+
+    public class Controller_Button{
+        private int controller_id;
+        private String controller_name;
+
+        public Controller_Button(String new_controller_name, int new_controller_id){
+            controller_id = new_controller_id;
+            controller_name = new_controller_name;
+        }
+
+        public String getController_name(){
+            return controller_name;
+        }
+        public int getController_id(){
+            return controller_id;
+        }
+    }
+
+    private class ControllersArrayAdapter extends ArrayAdapter<Controller_Button> {
+        private final Context context;
+
+        public ControllersArrayAdapter(Context context, int resourceId, List<Controller_Button> items){
+            super(context, resourceId, items);
+            this.context = context;
+        }
+
+        /*private view holder class*/
+        private class ViewHolder {
+            Button mButton;
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            ViewHolder holder = null;
+            final Controller_Button controller_button = getItem(position);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            if(convertView == null){
+                convertView = inflater.inflate(R.layout.controller_button, null);
+                holder = new ViewHolder();
+                holder.mButton = (Button) convertView.findViewById(R.id.controller_button);
+                convertView.setTag(holder);
+            }else
+                holder = (ViewHolder)convertView.getTag();
+
+            holder.mButton.setText(controller_button.getController_name());
+            holder.mButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    select_controller(controller_button.getController_id());
+                }
+            });
+            return convertView;
+        }
     }
 }

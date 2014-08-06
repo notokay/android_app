@@ -45,7 +45,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     private Boolean mConnectionStatus = false;
 
     //Allows for items to be enabled/disabled in the options menu
-    private Menu mMenu;
+    private static Menu mMenu;
 
     private int normal_interval = 100;
 
@@ -88,6 +88,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
             fragmentTransaction.replace(android.R.id.content, settingsFrag, "settingsFrag");
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+            mMenu.setGroupVisible(0, false);
           return true;
         }
         if (id == R.id.view_controllers) {
@@ -143,6 +144,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
                 }
         }
         if (fragmentManager.getBackStackEntryCount() > 0) {
+            mMenu.setGroupVisible(0, true);
             fragmentManager.popBackStack();
         } else {
             super.onBackPressed();
@@ -160,6 +162,7 @@ public class HomeScreen extends FragmentActivity implements StartBluetoothFrag.s
     public void onNormalIntervalChanged(int new_interval){
         normal_interval = new_interval;
     }
+
 
     //Allows the startBluetoothFrag fragment to communicate with main activity
     //param: int action_code: integer that designates what the action was

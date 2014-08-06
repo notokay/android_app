@@ -9,33 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.myfirstapp.app.HomeScreen">
     >
-
-    <Button
-        android:id="@+id/launch_bt_chat"
+    <ListView
+        android:id="@+id/controllers_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="launch_bt_chat"
-        android:text="@string/launch_bt_chat" />
+        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/launch_button_controller"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="launch_button_control"
-        android:text="@string/launch_button_controller" />
-
-    <Button
-        android:id="@+id/launch_slider_controller"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="launch_slider_control"
-        android:text="@string/launch_slider_controller" />
-
-    <Button
-        android:id="@+id/launch_motion_controller"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="launch_motion_control"
-        android:text="@string/launch_motion_controller" />
 
 </LinearLayout>

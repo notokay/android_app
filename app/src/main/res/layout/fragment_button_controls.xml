@@ -65,5 +65,65 @@
         android:layout_alignStart="@+id/start"
         android:layout_alignTop="@+id/right"
         android:text="@string/stop" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/button_controls_option_button_tl"
+                android:text="@string/button_controls_option_button_tl_default"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/button_controls_option_button_tc"
+                android:text="@string/button_controls_option_button_tc_default"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/button_controls_option_button_tr"
+                android:text="@string/button_controls_option_button_tr_default"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/button_controls_option_button_bl"
+                android:text="@string/button_controls_option_button_bl_default"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/button_controls_option_button_bc"
+                android:text="@string/button_controls_option_button_bc_default"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/button_controls_option_button_br"
+                android:text="@string/button_controls_option_button_br_default"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>

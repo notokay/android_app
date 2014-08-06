@@ -4,15 +4,196 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
     <PreferenceCategory
         android:title="@string/pref_general" />
-    <CheckBoxPreference
-        android:key="@string/pref_bluetooth_on_startup_key"
-        android:title="@string/pref_bluetooth_on_startup"
-        android:defaultValue="true" />
-    <EditTextPreference
-        android:key="@string/pref_sending_frequency_key"
-        android:title="@string/pref_sending_frequency"
-        android:inputType="number"
-        android:defaultValue="@string/pref_sending_frequency_default"
-        android:summary="@string/pref_sending_frequency_summary"/>
+        <CheckBoxPreference
+            android:key="@string/pref_bluetooth_on_startup_key"
+            android:title="@string/pref_bluetooth_on_startup"
+            android:defaultValue="true" />
+        <com.example.myfirstapp.app.EditTextPreference_withSummary
+            android:key="@string/pref_sending_frequency_key"
+            android:title="@string/pref_sending_frequency"
+            android:inputType="number"
+            android:dialogTitle="@string/dialog_sending_freq_title"
+            android:defaultValue="@string/pref_sending_frequency_default"
+            android:summary="%s ms"/>
+    <PreferenceCategory
+        android:title="Controllers" />
+        <PreferenceScreen
+            android:key="@string/pref_controllers_subscreen_key"
+            android:title="@string/pref_controllers_subscreen"
+            android:persistent="false" >
+            <PreferenceCategory
+                android:title="Existing Controllers"
+                />
+            <PreferenceScreen
+                android:key="@string/pref_buttonController_subscreen_key"
+                android:title="@string/launch_button_controller"
+                android:persistent="false" >
+                <PreferenceCategory
+                    android:title="Default Buttons" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_up_key"
+                    android:title="@string/up"
+                    android:inputType="number"
+                    android:defaultValue="@string/up_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_down_key"
+                    android:title="@string/down"
+                    android:inputType="number"
+                    android:defaultValue="@string/down_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_left_key"
+                    android:title="@string/left"
+                    android:inputType="number"
+                    android:defaultValue="@string/left_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_right_key"
+                    android:title="@string/right"
+                    android:inputType="number"
+                    android:defaultValue="@string/right_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_start_key"
+                    android:title="@string/start"
+                    android:inputType="number"
+                    android:defaultValue="@string/start_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_stop_key"
+                    android:title="@string/stop"
+                    android:inputType="number"
+                    android:defaultValue="@string/stop_default"
+                    android:summary="%s"/>
+                <PreferenceCategory
+                    android:title="Optional Buttons" />
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_1_key"
+                    android:title="@string/button_controls_option_button_tl_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_1_text_key"
+                    android:dependency="@string/pref_buttonController_optional_1_key"
+                    android:title="@string/pref_button_controller_optional_1_text_title"
+                    android:defaultValue="@string/button_controls_option_button_tl_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_1_message_key"
+                    android:dependency="@string/pref_buttonController_optional_1_key"
+                    android:title="@string/pref_button_controller_optional_1_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_2_key"
+                    android:title="@string/button_controls_option_button_tc_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_2_text_key"
+                    android:dependency="@string/pref_buttonController_optional_2_key"
+                    android:title="@string/pref_button_controller_optional_2_text_title"
+                    android:defaultValue="@string/button_controls_option_button_tc_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_2_message_key"
+                    android:dependency="@string/pref_buttonController_optional_2_key"
+                    android:title="@string/pref_button_controller_optional_2_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_3_key"
+                    android:title="@string/button_controls_option_button_tr_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_3_text_key"
+                    android:dependency="@string/pref_buttonController_optional_3_key"
+                    android:title="@string/pref_button_controller_optional_3_text_title"
+                    android:defaultValue="@string/button_controls_option_button_tr_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_3_message_key"
+                    android:dependency="@string/pref_buttonController_optional_3_key"
+                    android:title="@string/pref_button_controller_optional_3_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_4_key"
+                    android:title="@string/button_controls_option_button_bl_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_4_text_key"
+                    android:dependency="@string/pref_buttonController_optional_4_key"
+                    android:title="@string/pref_button_controller_optional_4_text_title"
+                    android:defaultValue="@string/button_controls_option_button_bl_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_4_message_key"
+                    android:dependency="@string/pref_buttonController_optional_4_key"
+                    android:title="@string/pref_button_controller_optional_4_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_5_key"
+                    android:title="@string/button_controls_option_button_bc_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_5_text_key"
+                    android:dependency="@string/pref_buttonController_optional_5_key"
+                    android:title="@string/pref_button_controller_optional_5_text_title"
+                    android:defaultValue="@string/button_controls_option_button_bc_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_5_message_key"
+                    android:dependency="@string/pref_buttonController_optional_5_key"
+                    android:title="@string/pref_button_controller_optional_5_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_buttonController_optional_6_key"
+                    android:title="@string/button_controls_option_button_br_default"
+                    android:defaultValue="false" />
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_6_text_key"
+                    android:dependency="@string/pref_buttonController_optional_6_key"
+                    android:title="@string/pref_button_controller_optional_6_text_title"
+                    android:defaultValue="@string/button_controls_option_button_br_default"
+                    android:summary="%s"/>
+                <com.example.myfirstapp.app.EditTextPreference_withSummary
+                    android:key="@string/pref_button_controller_optional_6_message_key"
+                    android:dependency="@string/pref_buttonController_optional_6_key"
+                    android:title="@string/pref_button_controller_optional_6_message_title"
+                    android:inputType="number"
+                    android:defaultValue="0"
+                    android:summary="%s"/>
 
+            </PreferenceScreen>
+
+            <PreferenceScreen
+                android:key="@string/pref_sliderController_subscreen_key"
+                android:title="@string/launch_slider_controller"
+                android:persistent="false" />
+            <PreferenceScreen
+                android:key="@string/pref_motionController_subscreen_key"
+                android:title="@string/launch_motion_controller"
+                android:persistent="false" />
+        <PreferenceCategory
+            android:title="Edit Controllers"/>
+            <Preference android:title="Add a Controller" >
+                <intent android:action="android.intent.action.VIEW"
+                    android:data="http://www.example.com" />
+            </Preference>
+            <Preference android:title="Edit an Existing Custom Controller" >
+                <intent android:action="android.intent.action.VIEW"
+                    android:data="http://www.example.com" />
+            </Preference>
+            <Preference android:title="Remove a Controller" >
+                <intent android:action="android.intent.action.VIEW"
+                    android:data="http://www.example.com" />
+            </Preference>
+        </PreferenceScreen>
 </PreferenceScreen>

@@ -11,6 +11,7 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,15 @@ public class SettingsFrag extends PreferenceFragment implements SharedPreference
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Load the preferences from an XML resource
+
         addPreferencesFromResource(R.xml.fragment_settings);
 
-        SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
-        EditTextPreference pref_freq = (EditTextPreference) findPreference(getResources().getString(R.string.pref_sending_frequency_key));
-        pref_freq.setSummary(sp.getString(getResources().getString(R.string.pref_sending_frequency_key), "")+ " ms");
+//        PreferenceScreen screen = (PreferenceScreen)findPreference(getResources().getString(R.string.pref_buttonController_subscreen_key));
+//        EditTextPreference pref_button = new EditTextPreference(getActivity());
+//        pref_button.setTitle("This is a button");
+//        pref_button.setSummary("This is the summary of the button");
+//        screen.addPreference(pref_button);
+
     }
 
     @Override
@@ -35,6 +40,7 @@ public class SettingsFrag extends PreferenceFragment implements SharedPreference
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         view.setBackgroundColor(getResources().getColor(android.R.color.background_dark));
+        setHasOptionsMenu(false);
         return view;
     }
 
@@ -74,7 +80,8 @@ public class SettingsFrag extends PreferenceFragment implements SharedPreference
             // Set summary to be the user-description for the selected value
             frequency_pref.setSummary(sharedPreferences.getString(key, "") + " ms");
             mListener.onNormalIntervalChanged(Integer.valueOf(sharedPreferences.getString(key, "100")));
-        }
-    }
+        }     }
+
+
 
 }
